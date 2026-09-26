@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "AI Browser Agent",
+  "version": "1.1.0",
+  "description": "שליטה בדפדפן עם Gemini, OpenRouter ו-ChatGPT Web",
+  "minimum_chrome_version": "114",
+
+  "permissions": ["sidePanel","storage","tabs","scripting","activeTab","contextMenus"],
+
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*",
+    "https://openrouter.ai/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "<all_urls>"
+  ],
+
+  "background": { "service_worker": "background.js", "type": "module" },
+
+  "side_panel": { "default_path": "sidepanel/panel.html" },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "exclude_matches": ["https://chatgpt.com/*","https://chat.openai.com/*"],
+      "js": ["content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://chatgpt.com/*","https://chat.openai.com/*"],
+      "js": ["content/chatgpt-web.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "action": { "default_title": "פתח AI Agent" },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
