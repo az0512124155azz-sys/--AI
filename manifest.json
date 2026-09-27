@@ -1,10 +1,18 @@
 {
   "manifest_version": 3,
   "name": "AI Browser Agent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "שותף חכם בדפדפן – Gemini, OpenRouter ו-ChatGPT Web",
   "minimum_chrome_version": "114",
-  "permissions": ["sidePanel", "storage", "tabs", "scripting", "activeTab", "contextMenus", "unlimitedStorage"],
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab",
+    "contextMenus",
+    "unlimitedStorage"
+  ],
   "host_permissions": [
     "https://generativelanguage.googleapis.com/*",
     "https://openrouter.ai/*",
@@ -12,8 +20,13 @@
     "https://chat.openai.com/*",
     "<all_urls>"
   ],
-  "background": { "service_worker": "background.js", "type": "module" },
-  "side_panel": { "default_path": "sidepanel/panel.html" },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/panel.html"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -28,10 +41,7 @@
       "run_at": "document_idle"
     }
   ],
-  "action": { "default_title": "AI Browser Agent" },
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+  "action": {
+    "default_title": "AI Browser Agent"
   }
 }
