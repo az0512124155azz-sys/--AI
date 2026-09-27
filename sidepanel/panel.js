@@ -7,6 +7,13 @@ gemini:{label:"Gemini",models:[
 {id:"gemini-3.5-flash",name:"3.5 Flash"},
 {id:"gemini-3.7-flash",name:"3.7 Flash"}
 ]},
+openai:{label:"OpenAI",models:[
+{id:"gpt-4o-mini",name:"GPT-4o mini"},
+{id:"gpt-4o",name:"GPT-4o"},
+{id:"o3-mini",name:"o3-mini"},
+{id:"gpt-4.1",name:"GPT-4.1"},
+{id:"gpt-4.1-mini",name:"GPT-4.1 mini"}
+]},
 openrouter:{label:"OpenRouter",models:[
 {id:"openrouter/free",name:"Free Router"},
 {id:"qwen/qwen3.8-27b:free",name:"Qwen3.8 27B"},
@@ -31,6 +38,7 @@ function syncModels(){
   $("model").innerHTML=list.map(m=>`<option value="${m.id}">${m.name}</option>`).join("");
   input.placeholder="שאל את "+PROVIDERS[p].label;
   if(p==="gemini") $("model").value="gemini-3.8-flash";
+  if(p==="openai") $("model").value="gpt-4o-mini";
 }
 function grow(){input.style.height="auto";input.style.height=Math.min(input.scrollHeight,140)+"px"}
 function canSend(){if(send)send.disabled=!input.value.trim()&&!busy}
@@ -54,14 +62,13 @@ function doSend(){
   const provider=$("provider").value;
   let model=$("model").value;
   if(provider==="gemini"&&STALE.test(model)){model="gemini-3.8-flash";$("model").value=model}
-  // UI hard timeout (ChatGPT can hang)
   const limit=provider==="chatgpt"?65000:90000;
   uiTimer=setTimeout(()=>{
     if(!busy)return;
     stopStream();
     busy=false;
     setSend(false);
-    if(!full)el.innerHTML=esc("פג הזמן. אם ChatGPT – ודא שהטאב chatgpt.com פתוח ומחובר, ואז נסה שוב.");
+    if(!full)el.innerHTML=esc("פג הזמן. נסה שוב או בחר ספק אחר (OpenAI API / Gemini).");
   },limit);
   try{
     streamPort=chrome.runtime.connect({name:"stream"});
@@ -102,8 +109,8 @@ function doSend(){
 }
 function stop(){stopStream();busy=false;setSend(false)}
 function drawFiles(){const box=$("atts");if(!box)return;if(!files.length){box.classList.remove("on");box.innerHTML="";return}box.classList.add("on");box.innerHTML=files.map((n,i)=>'<span class="chip">'+esc(n)+'<button type="button" data-i="'+i+'">×</button></span>').join("");box.querySelectorAll("button").forEach(b=>{b.onclick=()=>{files.splice(+b.getAttribute("data-i"),1);drawFiles()}})}
-async function loadSettings(){try{const s=await chrome.storage.local.get(["geminiKey","openrouterKey","systemPrompt","provider","model"]);if(s.geminiKey&&$("kG"))$("kG").value=s.geminiKey;if(s.openrouterKey&&$("kO"))$("kO").value=s.openrouterKey;if(s.systemPrompt&&$("sys"))$("sys").value=s.systemPrompt;if(s.provider&&$("provider"))$("provider").value=s.provider;syncModels();if(s.model&&!STALE.test(s.model)){const opts=[...$("model").options].map(o=>o.value);if(opts.includes(s.model))$("model").value=s.model}else if($("provider").value==="gemini"){$("model").value="gemini-3.8-flash";chrome.storage.local.set({model:"gemini-3.8-flash"})}}catch(_){syncModels()}}
-async function saveSettings(){await chrome.storage.local.set({geminiKey:($("kG")&&$("kG").value)||"",openrouterKey:($("kO")&&$("kO").value)||"",systemPrompt:($("sys")&&$("sys").value)||"",provider:$("provider").value,model:$("model").value});$("sheet").classList.remove("open")}
+async function loadSettings(){try{const s=await chrome.storage.local.get(["geminiKey","openrouterKey","openaiKey","systemPrompt","provider","model"]);if(s.geminiKey&&$("kG"))$("kG").value=s.geminiKey;if(s.openrouterKey&&$("kO"))$("kO").value=s.openrouterKey;if(s.openaiKey&&$("kOA"))$("kOA").value=s.openaiKey;if(s.systemPrompt&&$("sys"))$("sys").value=s.systemPrompt;if(s.provider&&$("provider")&&PROVIDERS[s.provider])$("provider").value=s.provider;syncModels();if(s.model&&!STALE.test(s.model)){const opts=[...$("model").options].map(o=>o.value);if(opts.includes(s.model))$("model").value=s.model}else if($("provider").value==="gemini"){$("model").value="gemini-3.8-flash"}}catch(_){syncModels()}}
+async function saveSettings(){await chrome.storage.local.set({geminiKey:($("kG")&&$("kG").value)||"",openrouterKey:($("kO")&&$("kO").value)||"",openaiKey:($("kOA")&&$("kOA").value)||"",systemPrompt:($("sys")&&$("sys").value)||"",provider:$("provider").value,model:$("model").value});$("sheet").classList.remove("open")}
 function openChatGPTLogin(){chrome.tabs.create({url:"https://chatgpt.com/"})}
 $("provider").onchange=()=>{syncModels();chrome.storage.local.set({provider:$("provider").value,model:$("model").value})};
 input.oninput=()=>{grow();canSend()};
