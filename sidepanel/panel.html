@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Browser Agent</title>
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+  <header class="hdr">
+    <div class="hdr-l"><span class="logo">✦</span><span class="title">AI Agent</span></div>
+    <div class="hdr-r">
+      <button id="btn-settings" class="icon" title="הגדרות">⚙</button>
+      <button id="btn-clear" class="icon" title="שיחה חדשה">+</button>
+    </div>
+  </header>
+  <div class="bar">
+    <select id="provider">
+      <option value="gemini">Gemini</option>
+      <option value="openrouter">OpenRouter</option>
+      <option value="chatgpt">ChatGPT (המנוי שלי)</option>
+    </select>
+    <select id="model"><option>טוען...</option></select>
+  </div>
+  <div id="ctx" class="ctx hide"><span>📌</span><span id="ctx-text" class="ctx-t"></span><button id="ctx-x" class="ctx-x">✕</button></div>
+  <div id="cgpt-warn" class="warn hide">פתח טאב chatgpt.com והתחבר כדי להשתמש בדלת זו.</div>
+  <main id="chat" class="chat"></main>
+  <div id="files" class="files hide"></div>
+  <footer class="foot">
+    <button id="btn-file" class="icon" title="צרף קובץ">📎</button>
+    <input type="file" id="file-input" hidden multiple accept=".txt,.md,.json,.js,.ts,.css,.html,.csv,.py,.pdf,.docx,image/*" />
+    <textarea id="input" rows="1" placeholder="שאל או בקש לשלוט בדפדפן..."></textarea>
+    <button id="btn-send" class="send" title="שלח">➤</button>
+  </footer>
+  <div id="modal" class="modal hide">
+    <div class="modal-box">
+      <div class="modal-h"><h2>הגדרות</h2><button id="btn-close" class="icon">✕</button></div>
+      <label><span>Gemini API Key</span><input type="password" id="key-gemini" placeholder="AIza..." /></label>
+      <label><span>OpenRouter API Key</span><input type="password" id="key-or" placeholder="sk-or-..." /></label>
+      <label><span>System Prompt</span><textarea id="sys-prompt" rows="8"></textarea></label>
+      <button id="btn-save" class="primary">שמור</button>
+    </div>
+  </div>
+  <script type="module" src="panel.js"></script>
+</body>
+</html>
