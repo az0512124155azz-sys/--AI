@@ -1,5 +1,6 @@
 import { streamGemini, listGeminiModels } from './lib/gemini.js';
 import { streamOpenRouter, listOpenRouterModels } from './lib/openrouter.js';
+import { streamOpenAI } from './lib/openai.js';
 import { streamChatGPT, checkLogin } from './lib/chatgpt.js';
 import { SYSTEM_PROMPT } from './lib/prompts.js';
 
@@ -43,7 +44,7 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.type !== 'CHAT') return;
     try {
-      const settings = await chrome.storage.local.get(['geminiKey', 'openrouterKey', 'systemPrompt']);
+      const settings = await chrome.storage.local.get(['geminiKey', 'openrouterKey', 'openaiKey', 'systemPrompt']);
       let messages = msg.messages.map((m) => ({ role: m.role, content: m.content }));
       if (msg.withPage && msg.provider !== 'chatgpt') {
         try {
@@ -76,6 +77,9 @@ chrome.runtime.onConnect.addListener((port) => {
       } else if (msg.provider === 'openrouter') {
         if (!settings.openrouterKey) throw new Error('חסר OpenRouter API Key');
         await streamOpenRouter({ apiKey: settings.openrouterKey, model: msg.model || 'openrouter/free', messages, systemPrompt: sys, onChunk });
+      } else if (msg.provider === 'openai') {
+        if (!settings.openaiKey) throw new Error('חסר OpenAI API Key — קבל מפתח ב-platform.openai.com');
+        await streamOpenAI({ apiKey: settings.openaiKey, model: msg.model || 'gpt-4o-mini', messages, systemPrompt: sys, onChunk });
       } else if (msg.provider === 'chatgpt') {
         await streamChatGPT({ messages, onChunk, requestId: rid });
       } else throw new Error('ספק לא מוכר');
