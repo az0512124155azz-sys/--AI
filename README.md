@@ -1,30 +1,21 @@
 # AI Browser Agent
 
-תוסף Chrome – שותף חכם ב-Side Panel.
+Chrome Side Panel agent — Gemini / OpenRouter / ChatGPT Web.
 
-**שותף · חכם · בחינם**
+## Install
+1. Download or clone this repo
+2. Open `chrome://extensions` → Developer mode → **Load unpacked**
+3. Select this folder
+4. Click the extension icon to open the Side Panel
 
-## שלוש דלתות
+## Models by provider
+| Provider | Models |
+|----------|--------|
+| **Gemini** | 2.5 Flash-Lite, 2.5 Flash, 2.0 Flash |
+| **OpenRouter (free)** | Free Router, Qwen3.8 27B, Gemma 4 31B, Llama 3.3 70B, Nemotron 3 Super |
+| **ChatGPT Web** | Auto, GPT-4o, o3-mini, GPT-4.1 |
 
-| דלת | איך |
-|-----|-----|
-| **Gemini** | API Key חינמי: https://aistudio.google.com/apikey |
-| **OpenRouter** | מודלים חינמיים: https://openrouter.ai/keys |
-| **ChatGPT Web** | המנוי שלך ב-chatgpt.com (בלי API Key) |
+Add API keys in **Settings (⚙)**.
 
-## התקנה
-
-1. `chrome://extensions`
-2. Developer mode
-3. Load unpacked → בחר את תיקיית הפרויקט
-4. לחץ על האייקון → Side Panel
-
-## יכולות
-
-- קריאת דף + טקסט מסומן
-- לחיצה / הקלדה / גלילה / ניווט / חילוץ
-- רשימת טאבים + צילום מסך
-- צירוף קבצים · זיכרון שיחה · RTL עברית · מצב כהה
-- עצירת סטרימינג
-
-MIT
+## Version
+1.2.0 — UI approved design + real model catalogs
