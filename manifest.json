@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "AI Browser Agent",
-  "version": "1.2.0",
-  "description": "שותף חכם בדפדפן – Gemini, OpenRouter ו-ChatGPT Web",
+  "version": "1.3.0",
+  "description": "שותף חכם בדפדפן – Gemini, OpenAI API, OpenRouter ו-ChatGPT Web",
   "minimum_chrome_version": "114",
   "permissions": [
     "sidePanel",
@@ -16,6 +16,7 @@
   "host_permissions": [
     "https://generativelanguage.googleapis.com/*",
     "https://openrouter.ai/*",
+    "https://api.openai.com/*",
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",
     "<all_urls>"
