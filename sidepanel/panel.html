@@ -2,45 +2,113 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>AI Browser Agent</title>
   <link rel="stylesheet" href="panel.css" />
 </head>
 <body>
-  <header class="hdr">
-    <div class="hdr-l"><span class="logo">✦</span><span class="title">AI Agent</span></div>
-    <div class="hdr-r">
-      <button id="btn-settings" class="icon" title="הגדרות">⚙</button>
-      <button id="btn-clear" class="icon" title="שיחה חדשה">+</button>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" opacity=".35"/>
+            <path d="M12 6.5v11M6.5 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">AI Agent</span>
+          <span class="brand-sub" id="status-line">מוכן</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="icon-btn" id="btn-new" title="שיחה חדשה" aria-label="שיחה חדשה">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="btn-settings" title="הגדרות" aria-label="הגדרות">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="provider-row">
+      <div class="select-wrap">
+        <label class="sr-only" for="provider">ספק</label>
+        <select id="provider" class="select">
+          <option value="gemini">Gemini</option>
+          <option value="openrouter">OpenRouter</option>
+          <option value="chatgpt">ChatGPT (המנוי שלי)</option>
+        </select>
+      </div>
+      <div class="select-wrap grow">
+        <label class="sr-only" for="model">מודל</label>
+        <select id="model" class="select">
+          <option value="">טוען מודלים…</option>
+        </select>
+      </div>
     </div>
-  </header>
-  <div class="bar">
-    <select id="provider">
-      <option value="gemini">Gemini</option>
-      <option value="openrouter">OpenRouter</option>
-      <option value="chatgpt">ChatGPT (המנוי שלי)</option>
-    </select>
-    <select id="model"><option>טוען...</option></select>
+
+    <div id="ctx-bar" class="ctx-bar hidden" role="status">
+      <span class="ctx-icon">📌</span>
+      <span id="ctx-text" class="ctx-text"></span>
+      <button type="button" id="ctx-clear" class="ctx-clear" title="נקה סימון" aria-label="נקה">×</button>
+    </div>
+
+    <div id="cgpt-banner" class="banner hidden" role="alert">
+      <span>פתח טאב ב־chatgpt.com והתחבר כדי להשתמש בדלת זו</span>
+    </div>
+
+    <main id="chat" class="chat" aria-live="polite"></main>
+
+    <div id="files-bar" class="files-bar hidden"></div>
+
+    <footer class="composer">
+      <div class="composer-box">
+        <button type="button" class="icon-btn attach" id="btn-attach" title="צרף קובץ" aria-label="צרף קובץ">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.4 11.6l-8.5 8.5a5 5 0 01-7.1-7.1l9.2-9.2a3.2 3.2 0 014.5 4.5L10 17.5a1.4 1.4 0 01-2-2l8.1-8.1"/></svg>
+        </button>
+        <textarea id="input" rows="1" placeholder="שאל משהו או בקש לפעול בדפדפן…" autocomplete="off"></textarea>
+        <button type="button" class="send-btn" id="btn-send" title="שלח" aria-label="שלח">
+          <svg class="ico-send" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          <svg class="ico-stop hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        </button>
+      </div>
+      <input type="file" id="file-input" class="hidden" multiple accept=".txt,.md,.json,.js,.ts,.css,.html,.csv,.py,.pdf,.docx,image/*,.xml,.yml,.yaml" />
+      <p class="hint-line">Enter לשליחה · Shift+Enter לשורה חדשה</p>
+    </footer>
   </div>
-  <div id="ctx" class="ctx hide"><span>📌</span><span id="ctx-text" class="ctx-t"></span><button id="ctx-x" class="ctx-x">✕</button></div>
-  <div id="cgpt-warn" class="warn hide">פתח טאב chatgpt.com והתחבר כדי להשתמש בדלת זו.</div>
-  <main id="chat" class="chat"></main>
-  <div id="files" class="files hide"></div>
-  <footer class="foot">
-    <button id="btn-file" class="icon" title="צרף קובץ">📎</button>
-    <input type="file" id="file-input" hidden multiple accept=".txt,.md,.json,.js,.ts,.css,.html,.csv,.py,.pdf,.docx,image/*" />
-    <textarea id="input" rows="1" placeholder="שאל או בקש לשלוט בדפדפן..."></textarea>
-    <button id="btn-send" class="send" title="שלח">➤</button>
-  </footer>
-  <div id="modal" class="modal hide">
-    <div class="modal-box">
-      <div class="modal-h"><h2>הגדרות</h2><button id="btn-close" class="icon">✕</button></div>
-      <label><span>Gemini API Key</span><input type="password" id="key-gemini" placeholder="AIza..." /></label>
-      <label><span>OpenRouter API Key</span><input type="password" id="key-or" placeholder="sk-or-..." /></label>
-      <label><span>System Prompt</span><textarea id="sys-prompt" rows="8"></textarea></label>
-      <button id="btn-save" class="primary">שמור</button>
+
+  <div id="settings-overlay" class="overlay hidden" aria-hidden="true">
+    <div class="drawer" role="dialog" aria-labelledby="settings-title">
+      <div class="drawer-head">
+        <h2 id="settings-title">הגדרות</h2>
+        <button type="button" class="icon-btn" id="btn-close-settings" aria-label="סגור">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="field">
+          <label for="key-gemini">Gemini API Key</label>
+          <input type="password" id="key-gemini" placeholder="AIza…" spellcheck="false" />
+          <a class="field-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">קבל מפתח חינם</a>
+        </div>
+        <div class="field">
+          <label for="key-or">OpenRouter API Key</label>
+          <input type="password" id="key-or" placeholder="sk-or-…" spellcheck="false" />
+          <a class="field-link" href="https://openrouter.ai/keys" target="_blank" rel="noopener">קבל מפתח חינם</a>
+        </div>
+        <div class="field">
+          <label for="sys-prompt">System Prompt</label>
+          <textarea id="sys-prompt" rows="7" spellcheck="false"></textarea>
+        </div>
+      </div>
+      <div class="drawer-foot">
+        <button type="button" class="btn-secondary" id="btn-cancel-settings">ביטול</button>
+        <button type="button" class="btn-primary" id="btn-save-settings">שמור</button>
+      </div>
     </div>
   </div>
+
   <script type="module" src="panel.js"></script>
 </body>
 </html>
