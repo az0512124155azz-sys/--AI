@@ -70,7 +70,9 @@ chrome.runtime.onConnect.addListener((port) => {
       const rid = msg.requestId || 'r' + Date.now();
       if (msg.provider === 'gemini') {
         if (!settings.geminiKey) throw new Error('חסר Gemini API Key');
-        await streamGemini({ apiKey: settings.geminiKey, model: msg.model || 'gemini-2.5-flash', messages, systemPrompt: sys, onChunk });
+        let model = msg.model || 'gemini-3.8-flash';
+        if (/gemini-2\.|gemini-1\./.test(model)) model = 'gemini-3.8-flash';
+        await streamGemini({ apiKey: settings.geminiKey, model, messages, systemPrompt: sys, onChunk });
       } else if (msg.provider === 'openrouter') {
         if (!settings.openrouterKey) throw new Error('חסר OpenRouter API Key');
         await streamOpenRouter({ apiKey: settings.openrouterKey, model: msg.model || 'openrouter/free', messages, systemPrompt: sys, onChunk });
@@ -93,7 +95,7 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       if (msg.type === 'CHECK_CGPT') { reply({ ok: true, loggedIn: await checkLogin() }); return; }
       if (msg.type === 'LIST_GEMINI') {
         const s = await chrome.storage.local.get('geminiKey');
-        reply({ ok: true, models: s.geminiKey ? await listGeminiModels(s.geminiKey) : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'] });
+        reply({ ok: true, models: s.geminiKey ? await listGeminiModels(s.geminiKey) : ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash'] });
         return;
       }
       if (msg.type === 'LIST_OR') {
