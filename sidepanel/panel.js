@@ -1,9 +1,25 @@
 (function(){"use strict";
 const $=id=>document.getElementById(id);
 const PROVIDERS={
-gemini:{label:"Gemini",models:[{id:"gemini-2.5-flash-lite",name:"2.5 Flash-Lite"},{id:"gemini-2.5-flash",name:"2.5 Flash"},{id:"gemini-2.0-flash",name:"2.0 Flash"}]},
-openrouter:{label:"OpenRouter",models:[{id:"openrouter/free",name:"Free Router"},{id:"qwen/qwen3.8-27b:free",name:"Qwen3.8 27B"},{id:"google/gemma-4-31b-it:free",name:"Gemma 4 31B"},{id:"meta-llama/llama-3.3-70b-instruct:free",name:"Llama 3.3 70B"},{id:"nvidia/nemotron-3-super-120b-a12b:free",name:"Nemotron 3 Super"}]},
-chatgpt:{label:"ChatGPT",models:[{id:"auto",name:"Auto"},{id:"gpt-4o",name:"GPT-4o"},{id:"o3-mini",name:"o3-mini"},{id:"gpt-4.1",name:"GPT-4.1"}]}
+gemini:{label:"Gemini",models:[
+{id:"gemini-3.8-flash",name:"3.8 Flash"},
+{id:"gemini-3.5-flash-lite",name:"3.5 Flash-Lite"},
+{id:"gemini-2.5-flash-lite",name:"2.5 Flash-Lite"},
+{id:"gemini-2.5-flash",name:"2.5 Flash"}
+]},
+openrouter:{label:"OpenRouter",models:[
+{id:"openrouter/free",name:"Free Router"},
+{id:"qwen/qwen3.8-27b:free",name:"Qwen3.8 27B"},
+{id:"google/gemma-4-31b-it:free",name:"Gemma 4 31B"},
+{id:"meta-llama/llama-3.3-70b-instruct:free",name:"Llama 3.3 70B"},
+{id:"nvidia/nemotron-3-super-120b-a12b:free",name:"Nemotron 3 Super"}
+]},
+chatgpt:{label:"ChatGPT",models:[
+{id:"auto",name:"Auto"},
+{id:"gpt-4o",name:"GPT-4o"},
+{id:"o3-mini",name:"o3-mini"},
+{id:"gpt-4.1",name:"GPT-4.1"}
+]}
 };
 let busy=false,files=[],conversation=[],streamPort=null;
 const input=$("input"),send=$("btnSend"),msgs=$("msgs");
