@@ -91,12 +91,22 @@
         </button>
       </header>
       <div class="body">
-        <label for="kG">מפתח Gemini</label>
+        <label for="kG">מפתח Gemini (API)</label>
         <input id="kG" type="password" placeholder="AIza…" autocomplete="off"/>
-        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">קבל מפתח</a>
+        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">קבל מפתח ב-Google AI Studio</a>
+
         <label for="kO">מפתח OpenRouter</label>
         <input id="kO" type="password" placeholder="sk-or-…" autocomplete="off"/>
         <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">קבל מפתח</a>
+
+        <label>ChatGPT – התחברות</label>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.45">
+          התחבר באתר ChatGPT (אפשר עם <strong>Google</strong>). אחרי ההתחברות חזור לתוסף ובחר ספק ChatGPT.
+        </p>
+        <button type="button" id="btnCgptLogin" class="save" style="width:100%;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px">
+          התחבר ל-ChatGPT (Google / OpenAI)
+        </button>
+
         <label for="sys">הנחיית מערכת</label>
         <textarea id="sys">אתה סוכן דפדפן. ענה בעברית, קצר ומדויק.</textarea>
       </div>
