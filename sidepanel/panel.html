@@ -75,8 +75,9 @@
       <div class="meta-line">
         <select id="provider" aria-label="ספק">
           <option value="gemini">Gemini</option>
+          <option value="openai">OpenAI API</option>
           <option value="openrouter">OpenRouter</option>
-          <option value="chatgpt">ChatGPT</option>
+          <option value="chatgpt">ChatGPT Web</option>
         </select>
         <span>·</span>
         <span>AI Browser Agent</span>
@@ -91,20 +92,24 @@
         </button>
       </header>
       <div class="body">
-        <label for="kG">מפתח Gemini (API)</label>
+        <label for="kG">מפתח Gemini</label>
         <input id="kG" type="password" placeholder="AIza…" autocomplete="off"/>
-        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">קבל מפתח ב-Google AI Studio</a>
+        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">קבל מפתח</a>
+
+        <label for="kOA">מפתח OpenAI API</label>
+        <input id="kOA" type="password" placeholder="sk-…" autocomplete="off"/>
+        <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">קבל מפתח ב-Platform</a>
 
         <label for="kO">מפתח OpenRouter</label>
         <input id="kO" type="password" placeholder="sk-or-…" autocomplete="off"/>
         <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">קבל מפתח</a>
 
-        <label>ChatGPT – התחברות</label>
+        <label>ChatGPT Web</label>
         <p style="font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.45">
-          התחבר באתר ChatGPT (אפשר עם <strong>Google</strong>). אחרי ההתחברות חזור לתוסף ובחר ספק ChatGPT.
+          שליחה דרך הטאב של chatgpt.com (מחובר בדפדפן). לא דורש מפתח API.
         </p>
-        <button type="button" id="btnCgptLogin" class="save" style="width:100%;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px">
-          התחבר ל-ChatGPT (Google / OpenAI)
+        <button type="button" id="btnCgptLogin" class="save" style="width:100%;margin-bottom:18px">
+          פתח ChatGPT
         </button>
 
         <label for="sys">הנחיית מערכת</label>
