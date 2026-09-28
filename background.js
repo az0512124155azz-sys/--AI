@@ -1,7 +1,7 @@
 import { streamGemini, listGeminiModels } from './lib/gemini.js';
 import { streamOpenRouter, listOpenRouterModels } from './lib/openrouter.js';
 import { streamOpenAI } from './lib/openai.js';
-import { streamChatGPT, checkLogin } from './lib/chatgpt.js';
+import { streamChatGPT, checkLogin, openChatGPTWorkspace } from './lib/chatgpt.js';
 import { SYSTEM_PROMPT } from './lib/prompts.js';
 
 globalThis.__cgpt = globalThis.__cgpt || new Map();
@@ -97,6 +97,11 @@ chrome.runtime.onMessage.addListener((msg, sender, reply) => {
       if (msg.type === 'CGPT_CHUNK') { globalThis.__cgpt?.get(msg.requestId)?.onChunk?.(msg.text); reply({ ok: true }); return; }
       if (msg.type === 'CGPT_LOGIN') { await chrome.storage.local.set({ chatgptLoggedIn: !!msg.loggedIn }); reply({ ok: true }); return; }
       if (msg.type === 'CHECK_CGPT') { reply({ ok: true, loggedIn: await checkLogin() }); return; }
+      if (msg.type === 'OPEN_CGPT_WORKSPACE') {
+        const w = await openChatGPTWorkspace();
+        reply({ ok: true, ...w });
+        return;
+      }
       if (msg.type === 'LIST_GEMINI') {
         const s = await chrome.storage.local.get('geminiKey');
         reply({ ok: true, models: s.geminiKey ? await listGeminiModels(s.geminiKey) : ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.5-flash'] });
