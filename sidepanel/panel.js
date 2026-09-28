@@ -111,7 +111,28 @@ function stop(){stopStream();busy=false;setSend(false)}
 function drawFiles(){const box=$("atts");if(!box)return;if(!files.length){box.classList.remove("on");box.innerHTML="";return}box.classList.add("on");box.innerHTML=files.map((n,i)=>'<span class="chip">'+esc(n)+'<button type="button" data-i="'+i+'">×</button></span>').join("");box.querySelectorAll("button").forEach(b=>{b.onclick=()=>{files.splice(+b.getAttribute("data-i"),1);drawFiles()}})}
 async function loadSettings(){try{const s=await chrome.storage.local.get(["geminiKey","openrouterKey","openaiKey","systemPrompt","provider","model"]);if(s.geminiKey&&$("kG"))$("kG").value=s.geminiKey;if(s.openrouterKey&&$("kO"))$("kO").value=s.openrouterKey;if(s.openaiKey&&$("kOA"))$("kOA").value=s.openaiKey;if(s.systemPrompt&&$("sys"))$("sys").value=s.systemPrompt;if(s.provider&&$("provider")&&PROVIDERS[s.provider])$("provider").value=s.provider;syncModels();if(s.model&&!STALE.test(s.model)){const opts=[...$("model").options].map(o=>o.value);if(opts.includes(s.model))$("model").value=s.model}else if($("provider").value==="gemini"){$("model").value="gemini-3.8-flash"}}catch(_){syncModels()}}
 async function saveSettings(){await chrome.storage.local.set({geminiKey:($("kG")&&$("kG").value)||"",openrouterKey:($("kO")&&$("kO").value)||"",openaiKey:($("kOA")&&$("kOA").value)||"",systemPrompt:($("sys")&&$("sys").value)||"",provider:$("provider").value,model:$("model").value});$("sheet").classList.remove("open")}
-function openChatGPTLogin(){chrome.tabs.create({url:"https://chatgpt.com/"})}
+function openChatGPTWorkspace(){
+  const st=$("cgptStatus");
+  if(st)st.textContent="פותח חלון…";
+  chrome.runtime.sendMessage({type:"OPEN_CGPT_WORKSPACE"},(r)=>{
+    if(chrome.runtime.lastError){
+      if(st)st.textContent="שגיאה: "+chrome.runtime.lastError.message;
+      return;
+    }
+    if(st)st.textContent=r?.ok?"חלון ChatGPT נפתח / בפוקוס. התחבר שם אם צריך.":"לא הצלחתי לפתוח חלון";
+  });
+}
+function checkChatGPTLogin(){
+  const st=$("cgptStatus");
+  if(st)st.textContent="בודק…";
+  chrome.runtime.sendMessage({type:"CHECK_CGPT"},(r)=>{
+    if(chrome.runtime.lastError){
+      if(st)st.textContent="שגיאה: "+chrome.runtime.lastError.message;
+      return;
+    }
+    if(st)st.textContent=r?.loggedIn?"מחובר ל-ChatGPT ✓":"לא מחובר — פתח חלון והתחבר";
+  });
+}
 $("provider").onchange=()=>{syncModels();chrome.storage.local.set({provider:$("provider").value,model:$("model").value})};
 input.oninput=()=>{grow();canSend()};
 input.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();if(!busy)doSend()}};
@@ -121,7 +142,8 @@ $("btnSet").onclick=()=>$("sheet").classList.add("open");
 $("btnClose").onclick=()=>$("sheet").classList.remove("open");
 $("btnCancel").onclick=()=>$("sheet").classList.remove("open");
 $("btnSave").onclick=saveSettings;
-if($("btnCgptLogin"))$("btnCgptLogin").onclick=openChatGPTLogin;
+if($("btnCgptLogin"))$("btnCgptLogin").onclick=openChatGPTWorkspace;
+if($("btnCgptCheck"))$("btnCgptCheck").onclick=checkChatGPTLogin;
 $("btnAtt").onclick=()=>$("fileIn").click();
 $("fileIn").onchange=e=>{Array.prototype.forEach.call(e.target.files||[],f=>files.push(f.name));drawFiles();e.target.value=""};
 $("sugs").querySelectorAll("button").forEach(b=>{b.onclick=()=>{input.value=b.getAttribute("data-q");grow();canSend();doSend()}});
