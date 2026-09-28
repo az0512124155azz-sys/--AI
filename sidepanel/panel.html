@@ -104,13 +104,18 @@
         <input id="kO" type="password" placeholder="sk-or-…" autocomplete="off"/>
         <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">קבל מפתח</a>
 
-        <label>ChatGPT Web</label>
+        <label>ChatGPT Web — חלון עבודה</label>
         <p style="font-size:13px;color:var(--muted);margin:0 0 10px;line-height:1.45">
-          שליחה דרך הטאב של chatgpt.com (מחובר בדפדפן). לא דורש מפתח API.
+          נפתח חלון Chrome אמיתי עם chatgpt.com (לא iframe — OpenAI חוסם הטמעה).
+          התחבר שם פעם אחת; התוסף ישלח דרכו.
         </p>
-        <button type="button" id="btnCgptLogin" class="save" style="width:100%;margin-bottom:18px">
-          פתח ChatGPT
+        <button type="button" id="btnCgptLogin" class="save" style="width:100%;margin-bottom:10px">
+          פתח חלון ChatGPT
         </button>
+        <button type="button" id="btnCgptCheck" class="cancel" style="width:100%;margin-bottom:18px">
+          בדוק אם מחובר
+        </button>
+        <p id="cgptStatus" style="font-size:12px;color:var(--muted);margin:0 0 16px"></p>
 
         <label for="sys">הנחיית מערכת</label>
         <textarea id="sys">אתה סוכן דפדפן. ענה בעברית, קצר ומדויק.</textarea>
